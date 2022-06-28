@@ -1,2 +1,4 @@
-import './sass/index.scss';
-import './js/search';
+import './css/styles.css';
+import './js/app.js'
+
+

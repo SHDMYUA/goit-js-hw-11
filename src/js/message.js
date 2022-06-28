@@ -1,17 +1,14 @@
-import {Notify} from 'notiflix';
+import { Notify } from 'notiflix';
 
-export const messageOk = (data) => {
-  Notify.success('Hooray! We found totalHits images.');
+export const okMessage = (data) => {
+  Notify.success(`Hooray! We found ${data.total} images.`);
 };
-
-export const messageError = (data) => {
-  Notify.success('Sorry, there are no images matching your search query. Please try again.');
+export const wrongMessage = () => {
+  Notify.failure(`Sorry, there are no images matching your search query. Please try again`);
 };
-
-export const messageEmpty = (data) => {
-  Notify.success("There's nothing to search.");
+export const emptyMessage = () => {
+  Notify.failure(`There is nothing to search!`);
 };
-
-export const messageEnd = (data) => {
-  Notify.success("We're sorry, but you've reached the end of search results.");
+export const endMessage = () => {
+  Notify.failure(`We're sorry, but you've reached the end of search results`);
 };
