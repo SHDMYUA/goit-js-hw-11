@@ -1,0 +1,22 @@
+@import '~node_modules/modern-normalize/modern-normalize.css';
+
+.page {
+  padding-top: 100px;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+button {
+  display: block;
+  padding: 0;
+  border: none;
+}
+
+.container {
+  margin: 0 auto;
+  width: 1280px;
+  padding: 0 15px;
+}
