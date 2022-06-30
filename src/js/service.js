@@ -7,8 +7,28 @@ const refs = getRefs();
 let value = '';
 let page = 0;
 
+// infinity scroll
+const options = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 1.0,
+};
+
+const observer = new IntersectionObserver(handleIntersection, options);
+const target = refs.spinners;
+
+function handleIntersection(entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      loadImages();
+    }
+  });
+}
+// end infinity scroll
+
 async function getDataFromForm(evt) {
   evt.preventDefault();
+  observer.unobserve(target);
   refs.gallery.innerHTML = '';
   value = evt.currentTarget.elements.searchQuery.value.trim();
   document.getElementById('search-form').reset();
@@ -23,6 +43,7 @@ async function getDataFromForm(evt) {
     const dataRes = await fetchImages(value, page);
     onFormSubmit(dataRes);
     updateInterface(dataRes);
+    observer.observe(target);
   } catch (error) {
     Notify.failure(`Sorry, there are no images matching your search query. Please try again`);
     }
