@@ -2,29 +2,11 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { getRefs } from './refs';
 import { fetchImages, perPage } from './api-service';
 import { updateInterface } from '../index';
+import { observer, target } from './scroll';
 
 const refs = getRefs();
 let value = '';
 let page = 0;
-
-// infinity scroll
-const options = {
-  root: null,
-  rootMargin: '0px',
-  threshold: 1.0,
-};
-
-const observer = new IntersectionObserver(handleIntersection, options);
-const target = refs.spinners;
-
-function handleIntersection(entries, observer) {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      loadImages();
-    }
-  });
-}
-// end infinity scroll
 
 async function getDataFromForm(evt) {
   evt.preventDefault();
@@ -54,7 +36,7 @@ function onFormSubmit(response) {
   const countOfImages = response.data.hits.length;
   
   if (countOfImages === 0) {
-    refs.spinners.classList.add('d-none');
+    refs.spinners.classList.add('d-none'); //off spinner
     refs.form.reset();
 
     return;
@@ -77,21 +59,25 @@ async function loadImages() {
 
     if (!morePages(dataRes)) {
       endMessage();
-      Notify.warning(`We're sorry, but you've reached the end of search results`);
+    Notify.failure(`Sorry, there are no images matching your search query. Please try again`);
       refs.spinners.classList.add('d-none');
     }
 
     updateInterface(dataRes);
   } catch (error) {
-    Notify.failure(`Sorry, there are no images matching your search query. Please try again`);
+    Notify.warning(`We're sorry, but you've reached the end of search results`);
+    refs.spinners.classList.add('d-none');
+    
   }
 }
 
 function morePages(response) {
+  console.log(page);
   const currentPage = page;
   const totalPages = Math.floor(response.data.totalHits / perPage);
 
   return currentPage === totalPages ? false : true;
+
 }
 
 export { getDataFromForm, loadImages };
